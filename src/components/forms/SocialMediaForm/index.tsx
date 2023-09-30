@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { socialMediaFormSchema } from "@/lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CompanySocialMedia } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { FC } from "react";
@@ -21,21 +22,57 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 interface SocialMediaFormProps {
-
+	detail: CompanySocialMedia | undefined;
 }
 
-const SocialMediaForm: FC<SocialMediaFormProps> = ({  }) => {
+const SocialMediaForm: FC<SocialMediaFormProps> = ({ detail }) => {
 	const form = useForm<z.infer<typeof socialMediaFormSchema>>({
 		resolver: zodResolver(socialMediaFormSchema),
 		defaultValues: {
-
+			facebook: detail?.facebook,
+			instagram: detail?.instagram,
+			linkedin: detail?.linkedin,
+			twitter: detail?.twitter,
+			youtube: detail?.youtube,
 		},
 	});
 
+	const { data: session } = useSession();
+	const { toast } = useToast();
+	const router = useRouter();
+
+	const onSubmit = async (val: z.infer<typeof socialMediaFormSchema>) => {
+		try {
+			const body = {
+				...val,
+				companyId: session?.user.id,
+			};
+
+			await fetch("/api/company/social-media", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(body),
+			});
+
+			await router.refresh();
+
+			toast({
+				title: "Success",
+				description: "Edit Social media success",
+			});
+		} catch (error) {
+			toast({
+				title: "Error",
+				description: "Please try again",
+			});
+
+			console.log(error);
+		}
+	};
 
 	return (
 		<Form {...form}>
-			<form  className="space-y-7">
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7">
 				<FieldInput
 					title="Basic Information"
 					subtitle="Add elsewhere links to your company profile. You can add only username without full https links."

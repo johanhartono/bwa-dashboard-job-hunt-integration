@@ -7,7 +7,7 @@ interface FieldInputProps {
 	subtitle: string;
 }
 
-const FieldInput: FC<FieldInputProps> = ({ children, title, subtitle }) => {
+const FieldInput: FC<FieldInputProps> = ({ children, subtitle, title }) => {
 	return (
 		<>
 			<div className="flex flex-row items-start">
@@ -17,7 +17,7 @@ const FieldInput: FC<FieldInputProps> = ({ children, title, subtitle }) => {
 				</div>
 				{children}
 			</div>
-
+			<Separator />
 		</>
 	);
 };
