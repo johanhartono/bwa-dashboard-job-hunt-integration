@@ -1,3 +1,5 @@
+//Sample Static Data
+
 import { EnumValues } from "zod";
 
 export type optionType = {

@@ -1,3 +1,5 @@
+//To prevent null session
+
 import NextAuth, { DefaultSession } from "next-auth";
 
 declare module "next-auth" {

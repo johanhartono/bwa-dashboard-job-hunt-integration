@@ -1,3 +1,5 @@
+//Customm defined functions goes here
+
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import bcrypt from "bcryptjs";
